@@ -2,6 +2,11 @@ package com.fsfind;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
+import org.apache.hadoop.fs.LocalFileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.PathFilter;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -9,9 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import org.apache.hadoop.fs.LocalFileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.PathFilter;
 
 public class FSFindTestUtil {
 
@@ -21,12 +23,13 @@ public class FSFindTestUtil {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMDDHHmm");
 
     /**
-     * Parse the test data file. The prefix parameter is useful for creating paths in random tmp
-     * spaces. Create a tmp directory inside /tmp with random suffic and pass '/tmp/<suffix>' as
-     * path prefix to this method to have all test paths prefixed with your tmp name space.
+     * Parse the test data file. The prefix parameter is useful for creating
+     * paths in random tmp spaces. Create a tmp directory inside /tmp with
+     * random suffic and pass '/tmp/<suffix>' as path prefix to this method to
+     * have all test paths prefixed with your tmp name space.
      */
     public FSFindTestDataFile loadFile(String testFile, String pathPrefix,
-            boolean dirMode) throws Exception {
+                                       boolean dirMode) throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
         URI url = classLoader.getResource(testFile).toURI();
         Scanner scanner = new Scanner(new File(url), "UTF8");
@@ -73,7 +76,7 @@ public class FSFindTestUtil {
     }
 
     public FSFindTestDataFile createTestBed(String testFile, String pathPrefix,
-            boolean dirMode) throws Exception {
+                                            boolean dirMode) throws Exception {
         return createTestBed(loadFile(testFile, pathPrefix, dirMode));
     }
 
@@ -129,7 +132,7 @@ public class FSFindTestUtil {
         private int includeTotalCount = 0;
 
         public FSFindTestDataFile(long purgeTime, List<FSFindTestDataEntry> entries,
-                PathFilter filter, Path pathOrPattern) {
+                                  PathFilter filter, Path pathOrPattern) {
             this.purgeTime = purgeTime;
             this.entries = entries;
             this.filter = filter;

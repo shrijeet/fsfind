@@ -1,20 +1,23 @@
 package com.fsfind.retention;
 
 import com.google.common.base.Preconditions;
-import java.io.Serializable;
-import java.util.Map;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.io.Serializable;
+import java.util.Map;
+
 /**
- * <code>DataRetentionPolicy</code> represents a retention policy in JSON format. Policy contains
- * paths & their corresponding retention time periods & attributes like batch delete size etc.
+ * <code>DataRetentionPolicy</code> represents a retention policy in JSON
+ * format. Policy contains paths & their corresponding retention time periods &
+ * attributes like batch delete size etc.
  */
 public class DataRetentionPolicy implements Serializable {
     private int batchSize;
     private Map<String, Integer> pathMapping;
 
     /**
-     * @param batch the batch delete size
+     * @param batch       the batch delete size
      * @param pathMapping paths and their retention periods
      */
     public DataRetentionPolicy(
@@ -52,8 +55,8 @@ public class DataRetentionPolicy implements Serializable {
     }
 
     /**
-     * Override the configured batching and set it to Integer.MAX_VALUE, essentially turning
-     * batching off.
+     * Override the configured batching and set it to Integer.MAX_VALUE,
+     * essentially turning batching off.
      */
     public void turnOffBatching() {
         this.batchSize = Integer.MAX_VALUE;

@@ -2,17 +2,19 @@ package com.fsfind.retention;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class TestDataRetentionConfiguration {
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testLoad() throws IOException {
         Map<String, DataRetentionPolicy> expected = new HashMap<String, DataRetentionPolicy>();
         Map<String, Integer> etlPaths = new HashMap<String, Integer>();
@@ -43,7 +45,7 @@ public class TestDataRetentionConfiguration {
 
     }
 
-    @Test(groups = { "unit" }, expectedExceptions = IllegalStateException.class)
+    @Test(groups = {"unit"}, expectedExceptions = IllegalStateException.class)
     void testInvalidConf() throws IOException {
         Map<String, Integer> etlPaths = new HashMap<String, Integer>();
         DataRetentionPolicy etlPolicy = new DataRetentionPolicy(500, etlPaths);

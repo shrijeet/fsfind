@@ -1,17 +1,20 @@
 package com.fsfind.retention;
 
 import com.google.common.io.Files;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.MapType;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.MapType;
 
 /**
- * <code>DataRetentionConfiguration</code> is programmatic representation of JSON configuration file
- * containing multiple <code>DataRetentionPolicy</code> keyed by their names.
+ * <code>DataRetentionConfiguration</code> is programmatic representation of
+ * JSON configuration file containing multiple <code>DataRetentionPolicy</code>
+ * keyed by their names.
  */
 public class DataRetentionConfiguration {
 
@@ -22,7 +25,6 @@ public class DataRetentionConfiguration {
      *
      * @param file path of configuration file
      * @return a map of data retention policies keyed by their names
-     * @throws IOException
      */
     public Map<String, DataRetentionPolicy> load(String file) throws IOException {
         // read the file and escape all forward slashes before deserializing.

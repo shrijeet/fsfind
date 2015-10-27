@@ -1,17 +1,12 @@
 package com.fsfind.retention;
 
+import com.google.common.collect.Lists;
+
 import com.fsfind.FSFind;
 import com.fsfind.FSFindImpl;
 import com.fsfind.FSFindQuery;
 import com.fsfind.FSFindResult;
-import com.google.common.collect.Lists;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -23,16 +18,24 @@ import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Tool to enforce data retention
  */
 public class DataRetention extends Command {
-    private static final Logger LOG = Logger.getLogger(DataRetention.class);
     static final String CONF_FILE = "conf_file";
     static final String POLICY = "policy";
     static final String HDFS_PATH = "hdfs_path";
     static final String NUM_DAYS = "num_days";
     static final String DELETE = "delete";
+    private static final Logger LOG = Logger.getLogger(DataRetention.class);
     private static final int THREAD_POOL_SIZE = 5;
     private FileSystem fs;
     private FSFind fsFind;
@@ -40,20 +43,18 @@ public class DataRetention extends Command {
     private boolean dryRun = true;
 
     /**
-     * Constructor with <code>FileSystem</code> initialized based on configuration found in
-     * classpath
-     *
-     * @throws IOException
+     * Constructor with <code>FileSystem</code> initialized based on
+     * configuration found in classpath
      */
     public DataRetention() throws IOException {
         this(FileSystem.get(new Configuration()));
     }
 
     /**
-     * Constructor with <code>FileSystem</code> initialized with instance passed by the client
+     * Constructor with <code>FileSystem</code> initialized with instance passed
+     * by the client
      *
      * @param fs a filesystem instance
-     * @throws IOException
      */
     public DataRetention(FileSystem fs) throws IOException {
         this.fs = fs;
@@ -121,12 +122,11 @@ public class DataRetention extends Command {
     }
 
     /**
-     * Apply retention on given <code>DataRetentionPolicy</code>. During dry run batching is turned
-     * off
+     * Apply retention on given <code>DataRetentionPolicy</code>. During dry run
+     * batching is turned off
      *
      * @param policy data retention policy
      * @return total count of deleted paths covered by this policy
-     * @throws IOException
      */
     protected final int applyPolicy(DataRetentionPolicy policy) throws IOException {
         policy.validate();
@@ -149,9 +149,8 @@ public class DataRetention extends Command {
      * Apply retention on given path
      *
      * @param pathPattern path from where to begin search from
-     * @param policy the policy which the path belongs to
+     * @param policy      the policy which the path belongs to
      * @return total count of deleted paths under this base path
-     * @throws IOException
      */
     protected final int processPathEntry(String pathPattern, DataRetentionPolicy policy) throws
             IOException {
@@ -178,8 +177,8 @@ public class DataRetention extends Command {
     }
 
     /**
-     * Issue async delete calls and wait for all async ops to finish. If running in dry run mode,
-     * fake the deletes
+     * Issue async delete calls and wait for all async ops to finish. If running
+     * in dry run mode, fake the deletes
      *
      * @param result the result of a <code>FSFind#find</code> operation
      */
@@ -205,7 +204,6 @@ public class DataRetention extends Command {
      *
      * @param pathPattern the glob pattern
      * @return list of directories that matched the given glob pattern `
-     * @throws IOException
      */
     protected List<Path> matchingDirectories(String pathPattern) throws IOException {
         GlobPattern globPattern = new GlobPattern(pathPattern);
@@ -234,10 +232,12 @@ public class DataRetention extends Command {
     }
 
     /**
-     * Calculate purge time as difference of current time and provided number of days
+     * Calculate purge time as difference of current time and provided number of
+     * days
      *
      * @param days number of days
-     * @return difference between current time and given number of days in millis
+     * @return difference between current time and given number of days in
+     * millis
      */
     protected long purgeTime(int days) {
         return System.currentTimeMillis() - TimeUnit.DAYS.toMillis(days);

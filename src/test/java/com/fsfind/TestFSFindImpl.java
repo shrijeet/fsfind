@@ -3,12 +3,7 @@ package com.fsfind;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocalFileSystem;
@@ -20,19 +15,26 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 public class TestFSFindImpl {
 
     private FileSystem localFS;
     private List<File> tmpDirs = new ArrayList<File>();
     private FSFindTestUtil findTestUtil = new FSFindTestUtil();
 
-    @BeforeClass(groups = { "unit" })
+    @BeforeClass(groups = {"unit"})
     public void setUp() throws Exception {
         Configuration conf = new Configuration();
         localFS = FileSystem.getLocal(conf);
     }
 
-    @AfterClass(groups = { "unit" })
+    @AfterClass(groups = {"unit"})
     public void tearDown() throws Exception {
         localFS.close();
         for (File tmpDir : tmpDirs) {
@@ -40,7 +42,7 @@ public class TestFSFindImpl {
         }
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testFindFilesOnly() throws Exception {
         File tmp = createTmpNameSpace();
         FSFindTestUtil.FSFindTestDataFile testData = findTestUtil.createTestBed("find.txt",
@@ -50,18 +52,18 @@ public class TestFSFindImpl {
                 Integer.MAX_VALUE, testData.getFilter());
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testFindIncludeDirs() throws Exception {
         File tmp = createTmpNameSpace();
         FSFindTestUtil.FSFindTestDataFile testData = findTestUtil.createTestBed("findIncludeDirs" +
-                ".txt",
+                        ".txt",
                 tmp.getCanonicalPath(), true);
         FSFind fsFind = new FSFindImpl(true, localFS);
         verifyFindResults(fsFind, FSFindQuery.make(testData.getPathOrPattern()), testData,
                 Integer.MAX_VALUE, testData.getFilter());
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testPathFilter() throws Exception {
         File tmp = createTmpNameSpace();
         FSFindTestUtil.FSFindTestDataFile testData = findTestUtil.createTestBed("findfilter.txt",
@@ -71,7 +73,7 @@ public class TestFSFindImpl {
                 Integer.MAX_VALUE, testData.getFilter());
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testBatching() throws Exception {
         File tmp = createTmpNameSpace();
         FSFindTestUtil.FSFindTestDataFile testData = findTestUtil.createTestBed("findbiglist.txt",
@@ -90,11 +92,11 @@ public class TestFSFindImpl {
                         shouldBeEmpty.size()));
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testBatchingResumeFromOptimization() throws Exception {
         File tmp = createTmpNameSpace();
         FSFindTestUtil.FSFindTestDataFile testData = findTestUtil.createTestBed("findresumesearch" +
-                ".txt",
+                        ".txt",
                 tmp.getCanonicalPath(), true);
         FSFind fsFind = new FSFindImpl(true, localFS); //include directories
 
@@ -134,11 +136,11 @@ public class TestFSFindImpl {
 
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testBatchingWithoutOptimization() throws Exception {
         File tmp = createTmpNameSpace();
         FSFindTestUtil.FSFindTestDataFile testData = findTestUtil.createTestBed("findresumesearch" +
-                ".txt",
+                        ".txt",
                 tmp.getCanonicalPath(), true);
         FSFind fsFind = new FSFindImpl(true, localFS); //include directories
         FSFindResult result1 = fsFind.find(FSFindQuery.make(testData.getPathOrPattern()),
@@ -165,7 +167,7 @@ public class TestFSFindImpl {
 
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testFileNotFoundException() throws Exception {
         File tmp = createTmpNameSpace();
         FSFindTestUtil.FSFindTestDataFile testData = findTestUtil.createTestBed("findexception" +
@@ -183,18 +185,19 @@ public class TestFSFindImpl {
         fs.close();
     }
 
-    @Test(groups = { "unit" }, expectedExceptions = IllegalStateException.class)
+    @Test(groups = {"unit"}, expectedExceptions = IllegalStateException.class)
     public void testInvalidSearch() throws IOException {
         FSFind fsFind = new FSFindImpl(true, localFS);
         fsFind.find(FSFindQuery.make(new Path("/this_cant_exist")), Long.MAX_VALUE);
     }
 
     /**
-     * Verify count, value of included items & return the actual result for further assertions.
+     * Verify count, value of included items & return the actual result for
+     * further assertions.
      */
     private FSFindResult verifyFindResults(FSFind fsFind, FSFindQuery query,
-            FSFindTestUtil.FSFindTestDataFile testData,
-            int batch, PathFilter filter) throws IOException {
+                                           FSFindTestUtil.FSFindTestDataFile testData,
+                                           int batch, PathFilter filter) throws IOException {
         FSFindResult actual = fsFind.find(query, testData.getPurgeTime(), batch, filter);
         boolean usingBatching = (batch != Integer.MAX_VALUE);
 

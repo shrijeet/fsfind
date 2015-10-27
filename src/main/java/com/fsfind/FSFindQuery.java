@@ -1,15 +1,17 @@
 package com.fsfind;
 
 import com.google.common.collect.Sets;
-import java.util.Set;
 
 import org.apache.hadoop.fs.Path;
 
+import java.util.Set;
+
 /**
- * <code>FSFindQuery</code> represents a search query for <code>FSFind#find</code> method. It
- * enapsulates two types of data. First being the to-be-searched path (a directory) & the other type
- * is a set of paths which are marked as 'covered'. These paths act as hint for search algorithm, if
- * a path is marked as covered - algorithm does not explore it.
+ * <code>FSFindQuery</code> represents a search query for
+ * <code>FSFind#find</code> method. It enapsulates two types of data. First
+ * being the to-be-searched path (a directory) & the other type is a set of
+ * paths which are marked as 'covered'. These paths act as hint for search
+ * algorithm, if a path is marked as covered - algorithm does not explore it.
  */
 public class FSFindQuery {
 
@@ -28,9 +30,9 @@ public class FSFindQuery {
     }
 
     /**
-     * Helper method to create an instance of FSFindQuery from FSFindResult. Client should pass the
-     * FSFindResult from the last iteration. The explored path hint is passed from FSFindResult to
-     * FSFindQuery.
+     * Helper method to create an instance of FSFindQuery from FSFindResult.
+     * Client should pass the FSFindResult from the last iteration. The explored
+     * path hint is passed from FSFindResult to FSFindQuery.
      */
     public static FSFindQuery makeFromResult(Path path, FSFindResult result) {
         FSFindQuery query = new FSFindQuery(path);

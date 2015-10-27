@@ -3,16 +3,19 @@ package com.fsfind;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
+import org.apache.hadoop.fs.Path;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.apache.hadoop.fs.Path;
 
 /**
- * <code>FSFindResult</code> represents the result of a find operation. Along with the candidates
- * discovered during the search (which met the search criteria), it also contains a set of
- * directories which were completely explored during this search iteration. This knowledge can be
- * passed to the next iteration for optimizing the search.
+ * <code>FSFindResult</code> represents the result of a find operation. Along
+ * with the candidates discovered during the search (which met the search
+ * criteria), it also contains a set of directories which were completely
+ * explored during this search iteration. This knowledge can be passed to the
+ * next iteration for optimizing the search.
  */
 public class FSFindResult {
 

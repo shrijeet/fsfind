@@ -1,14 +1,16 @@
 package com.fsfind;
 
 import com.google.common.base.Preconditions;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathFilter;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class FSFindImpl extends FSFind {
@@ -18,7 +20,8 @@ public class FSFindImpl extends FSFind {
     private FileSystem fs;
 
     /**
-     * Default constructor with <code>includeDirectories</code> flag set to false
+     * Default constructor with <code>includeDirectories</code> flag set to
+     * false
      *
      * @param fs the filesystem instace to access file metadata
      */
@@ -29,11 +32,12 @@ public class FSFindImpl extends FSFind {
     /**
      * Constructor
      *
-     * @param includeDirectories client should pass true if directories should be included in 'find'
-     *                           output. When set true, If while traversing a directory discovered
-     *                           that  all files directly underneath it are candidate for inclusion,
-     *                           we include the directory itself in the o/p, instead of individual
-     *                           files.
+     * @param includeDirectories client should pass true if directories should
+     *                           be included in 'find' output. When set true, If
+     *                           while traversing a directory discovered that
+     *                           all files directly underneath it are candidate
+     *                           for inclusion, we include the directory itself
+     *                           in the o/p, instead of individual files.
      * @param fs                 the filesystem instace to access file metadata
      */
     public FSFindImpl(boolean includeDirectories, FileSystem fs) {
@@ -52,20 +56,19 @@ public class FSFindImpl extends FSFind {
     }
 
     /**
-     * The flow:
-     * 1. Verify the directory exists.
-     * 2. If directory was covered during last search, skip it this time.
-     * 3. Check if path filter applies to the directory, if filter rejects directory; don't check
-     * files underneath.
-     * 4. Initialize the 'includedAllFiles' flag to true, the flag tracks the fact whether or not
-     * we included all files as return candidates in the directory being traversed.
-     * 5. Recrusively traverse the directory while maintaining the 'includedAllFiles' flag.
-     * 6. If after finishing a directory 'includedAllFiles' is still set as true,
-     * remove the individual files and include the whole directory in return list.
-     * 7. If at any point the candidate list gets bigger than the batch, bail out.
+     * The flow: 1. Verify the directory exists. 2. If directory was covered
+     * during last search, skip it this time. 3. Check if path filter applies to
+     * the directory, if filter rejects directory; don't check files underneath.
+     * 4. Initialize the 'includedAllFiles' flag to true, the flag tracks the
+     * fact whether or not we included all files as return candidates in the
+     * directory being traversed. 5. Recrusively traverse the directory while
+     * maintaining the 'includedAllFiles' flag. 6. If after finishing a
+     * directory 'includedAllFiles' is still set as true, remove the individual
+     * files and include the whole directory in return list. 7. If at any point
+     * the candidate list gets bigger than the batch, bail out.
      *
-     * Return <code>true</code> if we had to bail out early due to batch size restriction. For all
-     * other reasons, return false.
+     * Return <code>true</code> if we had to bail out early due to batch size
+     * restriction. For all other reasons, return false.
      */
     private boolean internalFind(Path searchDir, FSFindQuery origQuery, long timestamp,
                                  int batchSize, PathFilter filter, FSFindResult result)
@@ -79,7 +82,7 @@ public class FSFindImpl extends FSFind {
         } catch (FileNotFoundException e) {
             LOG.warn(String.format("%s can't be found, it must have been deleted after we " +
                     "started the search", searchDir));
-           return false;
+            return false;
         }
 
         Preconditions.checkState(searchDirStatus.isDirectory(), "Expected a directory but found "
@@ -121,7 +124,7 @@ public class FSFindImpl extends FSFind {
                     so we bail early as well */
                     return true;
                 } else if (result.size() == 0 ||
-                            result.size() > 0 && !result.getLast().equals(status.getPath())) {
+                        result.size() > 0 && !result.getLast().equals(status.getPath())) {
                     // Since the subdir was not included in the result, unset the all files flag.
                     includedAllFiles = false;
                 }

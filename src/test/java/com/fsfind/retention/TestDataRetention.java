@@ -1,17 +1,11 @@
 package com.fsfind.retention;
 
-import com.fsfind.FSFindTestUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+
+import com.fsfind.FSFindTestUtil;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -25,6 +19,15 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 public class TestDataRetention {
 
     private final CommandLineParser parser = new GnuParser();
@@ -35,7 +38,7 @@ public class TestDataRetention {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss.SSS");
     private Options options;
 
-    @BeforeClass(groups = { "unit" })
+    @BeforeClass(groups = {"unit"})
     public void setUp() throws Exception {
         Configuration conf = new Configuration();
         localFS = FileSystem.getLocal(conf);
@@ -45,7 +48,7 @@ public class TestDataRetention {
         options = retention.buildOptions();
     }
 
-    @AfterClass(groups = { "unit" })
+    @AfterClass(groups = {"unit"})
     public void tearDown() throws Exception {
         localFS.close();
         for (File tmpDir : tmpDirs) {
@@ -57,7 +60,7 @@ public class TestDataRetention {
      * Simple test, create recent files and one day old files, run retention with one day as
      * purge time and verify the recent files are still there
      */
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testSimpleRetention() throws Exception {
         File base = createTmpNameSpace();
 
@@ -89,7 +92,7 @@ public class TestDataRetention {
      * Create files within same day but different hours, run retention with one day as purge time
      * and verify no file gets deleted
      */
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testRetentionSameDayFiles() throws Exception {
         File base = createTmpNameSpace();
 
@@ -122,7 +125,7 @@ public class TestDataRetention {
      * Even if all files under the base (path where search begins) path are older than our purge
      * time, we should not delete the base path
      */
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testBasePathNeverGetsDeleted() throws IOException {
         File base = createTmpNameSpace();
         long oneDayAgo = nTimeUnitsAgo(System.currentTimeMillis(), 1, TimeUnit.DAYS);
@@ -134,7 +137,7 @@ public class TestDataRetention {
     }
 
     /* If all files under a sub directory are old, delete the sub directory */
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testWholeSubDirGetsDeleted() throws IOException {
         File base = createTmpNameSpace();
 
@@ -151,7 +154,7 @@ public class TestDataRetention {
     }
 
     /* If subdir is empty, delete it completely - only if its old */
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testEmptySubDirs() throws IOException {
         File base = createTmpNameSpace();
 
@@ -182,7 +185,7 @@ public class TestDataRetention {
         Assert.assertTrue(base.exists());
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void tesMatchingDirectories() throws Exception {
         File base = createTmpNameSpace();
         File sub1 = new File(base, "sub1");
@@ -194,10 +197,10 @@ public class TestDataRetention {
         String pathPattern = base.getCanonicalPath() + "/sub*";
         List<Path> dirs = retention.matchingDirectories(pathPattern);
         Assert.assertEquals(dirs.size(), 2);
-        Assert.assertEqualsNoOrder(dirs.toArray(), new Path[] {fileToPath(sub1), fileToPath(sub2)});
+        Assert.assertEqualsNoOrder(dirs.toArray(), new Path[]{fileToPath(sub1), fileToPath(sub2)});
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testDeepDirectoryStructures() throws Exception {
         /* test case's directory lay out */
         // |_base/sub1
@@ -243,7 +246,7 @@ public class TestDataRetention {
         Assert.assertEqualsNoOrder(actualSurvivors.toArray(), survivors.toArray());
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testMultiplePathsUnderOnePolicy() throws Exception {
         File baseA = createTmpNameSpace();
         File baseB = createTmpNameSpace();
@@ -268,7 +271,7 @@ public class TestDataRetention {
         Assert.assertTrue(baseB.exists());
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     /* Non existing dir don't throw exception */
     public void testRetentionNonExistingPath() throws Exception {
         int deleteCount = applyRetention(1, "/nonExisting");
@@ -277,7 +280,7 @@ public class TestDataRetention {
         Assert.assertEquals(deleteCount, 0);
     }
 
-    @Test(groups = { "unit" })
+    @Test(groups = {"unit"})
     public void testIsValidOption() throws Exception {
         String mockConfFile = "test.xml";
         String mockPolicy = "testPolicy";
@@ -285,43 +288,43 @@ public class TestDataRetention {
         String mockNumDays = "30";
 
         // Test give both CONF_FILE and NUM_DAYS. Expect false.
-        String[] args = new String[] {
-            "-" + DataRetention.CONF_FILE, mockConfFile, "-" + DataRetention.NUM_DAYS, mockNumDays,
+        String[] args = new String[]{
+                "-" + DataRetention.CONF_FILE, mockConfFile, "-" + DataRetention.NUM_DAYS, mockNumDays,
         };
         CommandLine cl = parser.parse(options, args);
         Assert.assertFalse(retention.isValidOption(cl), "");
 
         // Test give neither CONF_FILE nor HDFS_PATH. Expect false.
-        args = new String[] {
-            "-" + DataRetention.POLICY, mockPolicy, "-" + DataRetention.NUM_DAYS, mockNumDays,
+        args = new String[]{
+                "-" + DataRetention.POLICY, mockPolicy, "-" + DataRetention.NUM_DAYS, mockNumDays,
         };
         cl = parser.parse(options, args);
         Assert.assertFalse(retention.isValidOption(cl));
 
         // Test give HDFS_PATH but not NUM_DAYS. Expect false.
-        args = new String[] {
-            "-" + DataRetention.HDFS_PATH, mockHdfsPath,
+        args = new String[]{
+                "-" + DataRetention.HDFS_PATH, mockHdfsPath,
         };
         cl = parser.parse(options, args);
         Assert.assertFalse(retention.isValidOption(cl));
 
         // Test give CONF_FILE and POLICY. Expect true.
-        args = new String[] {
-            "-" + DataRetention.CONF_FILE, mockConfFile, "-" + DataRetention.POLICY, mockPolicy,
+        args = new String[]{
+                "-" + DataRetention.CONF_FILE, mockConfFile, "-" + DataRetention.POLICY, mockPolicy,
         };
         cl = parser.parse(options, args);
         Assert.assertTrue(retention.isValidOption(cl));
 
         // Test give HDFS_PATH and NUM_DAYS. Expect true.
-        args = new String[] {
-            "-" + DataRetention.HDFS_PATH, mockHdfsPath, "-" + DataRetention.NUM_DAYS, mockNumDays,
+        args = new String[]{
+                "-" + DataRetention.HDFS_PATH, mockHdfsPath, "-" + DataRetention.NUM_DAYS, mockNumDays,
         };
         cl = parser.parse(options, args);
         Assert.assertTrue(retention.isValidOption(cl));
 
         // Test give only CONF_FILE. Expect true.
-        args = new String[] {
-            "-" + DataRetention.CONF_FILE, mockConfFile,
+        args = new String[]{
+                "-" + DataRetention.CONF_FILE, mockConfFile,
         };
         cl = parser.parse(options, args);
         Assert.assertTrue(retention.isValidOption(cl));
