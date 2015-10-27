@@ -1,0 +1,8 @@
+/user/johndoe 201406100002 ACCEPTS_ALL
+1 0 /user/johndoe/file1 201406092152
+1 0 /user/johndoe/file2 201406092152
+1 0 /user/johndoe/file3 201406092152
+# if following subdir gets deleted in the middle of 
+# execution, just return the first top three files.
+1 1 /user/johndoe/subdir 201406090000
+0 0 /user/johndoe/subdir/file 201406090000

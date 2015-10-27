@@ -1,0 +1,15 @@
+# See comments in find.txt
+/user/johndoe 201406100002 ACCEPTS_ALL
+1 0 /user/johndoe/file1 201406092152
+1 0 /user/johndoe/file2 201406092152
+1 0 /user/johndoe/file3 201406092152
+0 1 /user/johndoe/vdir 201406100006
+1 0 /user/johndoe/vdir/file4 201406092152
+0 0 /user/johndoe/vdir/file5 201406100006
+1 1 /user/johndoe/xdir 201406092153
+1 0 /user/johndoe/xdir/file4 201406092153
+1 0 /user/johndoe/xdir/file5 201406092153
+1 0 /user/johndoe/xdir/file6 201406092153
+0 1 /user/johndoe/ydir 201406100003
+1 0 /user/johndoe/ydir/file4 201406092154
+0 0 /user/johndoe/ydir/file5 201406100003

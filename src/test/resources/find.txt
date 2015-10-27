@@ -1,0 +1,20 @@
+# This is custom test data format. First few lines
+# start with '#', they are comments & ignored. The first line 
+# after '#' describes the purge time, search path/pattern
+# and path filter. After that paths follow. Each path has a corresponding
+# modification time in yyyyMMDDHHmm. Path entries start with 1/0, 1 means
+# the path should be included in find output, 0 means it should not be. Next
+# 1/0 indicates whether the path is a directory.
+/user/johndoe 201406100002 ACCEPTS_ALL
+0 1 /user/johndoe 201406100003
+1 0 /user/johndoe/file1 201406092152
+1 0 /user/johndoe/file2 201406092152
+1 0 /user/johndoe/file3 201406092152
+0 0 /user/johndoe/file4 201406100003
+0 0 /user/johndoe/file5 201406100003
+0 0 /user/johndoe/file6 201406100002
+0 1 /user/johndoe/dir1 201406090000
+1 0 /user/johndoe/dir1/file 201406090000
+0 1 /user/johndoe/dir2 201406100001
+1 0 /user/johndoe/dir2/file1 201406092359
+1 0 /user/johndoe/dir2/file2 201406100001
